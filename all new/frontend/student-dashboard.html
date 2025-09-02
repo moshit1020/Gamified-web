@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - EduQuest</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Spline 3D Viewer -->
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.53/build/spline-viewer.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #3B82F6;
+            --secondary-color: #10B981;
+            --accent-color: #F59E0B;
+            --danger-color: #EF4444;
+            --dark-bg: #0F172A;
+            --card-bg: #1E293B;
+            --text-light: #F8FAFC;
+            --text-gray: #94A3B8;
+            --border-color: #334155;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        .user-details h3 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-details p {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+        }
+
+        .logout-btn {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #DC2626;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: var(--gradient-1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .welcome-text h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-text p {
+            font-size: 1.1rem;
+            color: #e0e7ff;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #e0e7ff;
+        }
+
+        /* Robot Section */
+        .robot-section {
+            position: relative;
+            height: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        spline-viewer {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* STEM Subjects Section */
+        .subjects-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .subject-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary-color);
+        }
+
+        .subject-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .subject-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .subject-icon.math { background: var(--gradient-1); }
+        .subject-icon.science { background: var(--gradient-2); }
+        .subject-icon.technology { background: var(--gradient-3); }
+        .subject-icon.engineering { background: linear-gradient(135deg, #ff6b6b, #ee5a24); }
+
+        .subject-info h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .subject-info p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .subject-progress {
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-gray);
+        }
+
+        .lessons-list {
+            margin-top: 1rem;
+        }
+
+        .lesson-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--dark-bg);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .lesson-item:hover {
+            background: var(--border-color);
+        }
+
+        .lesson-item.completed {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .lesson-item.current {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .lesson-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: white;
+        }
+
+        .lesson-icon.completed { background: var(--secondary-color); }
+        .lesson-icon.current { background: var(--primary-color); }
+        .lesson-icon.locked { background: var(--text-gray); }
+
+        .lesson-info {
+            flex: 1;
+        }
+
+        .lesson-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .lesson-desc {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+        }
+
+        .lesson-action {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .lesson-action.start {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .lesson-action.exam {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .lesson-action:disabled {
+            background: var(--text-gray);
+            cursor: not-allowed;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .welcome-content {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>EduQuest</span>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">SU</div>
+                <div class="user-details">
+                    <h3 id="userName">Student User</h3>
+                    <p id="userGrade">Grade 8 • Level 1</p>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <div class="welcome-content">
+                <div class="welcome-text">
+                    <h1>Welcome back, <span id="welcomeName">Student</span>!</h1>
+                    <p>Continue your learning journey and unlock new achievements</p>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalPoints">0</div>
+                            <div class="stat-label">Total Points</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="currentLevel">1</div>
+                            <div class="stat-label">Current Level</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="completedLessons">0</div>
+                            <div class="stat-label">Lessons Completed</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="robot-section">
+                    <spline-viewer url="undefined"></spline-viewer>
+                </div>
+            </div>
+        </section>
+
+        <!-- STEM Subjects Section -->
+        <section class="subjects-section">
+            <h2 class="section-title">STEM Subjects</h2>
+            <div class="subjects-grid" id="subjectsGrid">
+                <!-- Subjects will be loaded dynamically -->
+            </div>
+        </section>
+    </main>
+
+    <script src="js/exam-system.js"></script>
+    <script>
+        // Global variables
+        let currentUser = null;
+
+        // STEM Subjects data
+        const stemSubjects = {
+            math: {
+                name: 'Mathematics',
+                icon: 'fas fa-calculator',
+                color: 'math',
+                lessons: []
+            },
+            science: {
+                name: 'Science',
+                icon: 'fas fa-flask',
+                color: 'science',
+                lessons: []
+            },
+            technology: {
+                name: 'Technology',
+                icon: 'fas fa-laptop-code',
+                color: 'technology',
+                lessons: []
+            },
+            engineering: {
+                name: 'Engineering',
+                icon: 'fas fa-cogs',
+                color: 'engineering',
+                lessons: []
+            }
+        };
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            const authToken = localStorage.getItem('authToken');
+            if (!authToken) {
+                window.location.href = '/frontend/index.html';
+                return;
+            }
+
+            // Load user data
+            currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+            if (!currentUser.userType || currentUser.userType !== 'student') {
+                window.location.href = '/frontend/index.html';
+                return;
+            }
+
+            // Update UI with user data
+            updateUserInterface();
+            
+            // Generate lessons based on grade
+            generateLessonsForGrade(currentUser.grade);
+            
+            // Load subjects
+            loadSubjects();
+        });
+
+        function updateUserInterface() {
+            document.getElementById('userName').textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+            document.getElementById('userGrade').textContent = `Grade ${currentUser.grade} • Level ${currentUser.currentLevel || 1}`;
+            document.getElementById('welcomeName').textContent = currentUser.firstName;
+            document.getElementById('userAvatar').textContent = currentUser.firstName.charAt(0) + currentUser.lastName.charAt(0);
+            document.getElementById('totalPoints').textContent = currentUser.totalPoints || 0;
+            document.getElementById('currentLevel').textContent = currentUser.currentLevel || 1;
+            document.getElementById('completedLessons').textContent = currentUser.completedLessons || 0;
+        }
+
+        function generateLessonsForGrade(grade) {
+            const gradeNum = parseInt(grade);
+            const lessonCount = gradeNum < 8 ? 5 : 6;
+            const examDifficulty = gradeNum < 8 ? 'easy' : 'moderate';
+
+            Object.keys(stemSubjects).forEach(subjectKey => {
+                const subject = stemSubjects[subjectKey];
+                subject.lessons = [];
+                
+                for (let i = 1; i <= lessonCount; i++) {
+                    subject.lessons.push({
+                        id: `${subjectKey}_lesson_${i}`,
+                        title: `${subject.name} Lesson ${i}`,
+                        description: `Learn fundamental concepts of ${subject.name.toLowerCase()}`,
+                        completed: false,
+                        examDifficulty: examDifficulty,
+                        examCompleted: false
+                    });
+                }
+            });
+        }
+
+        function loadSubjects() {
+            const subjectsGrid = document.getElementById('subjectsGrid');
+            subjectsGrid.innerHTML = '';
+
+            Object.keys(stemSubjects).forEach(subjectKey => {
+                const subject = stemSubjects[subjectKey];
+                const completedLessons = subject.lessons.filter(lesson => lesson.completed).length;
+                const totalLessons = subject.lessons.length;
+                const progressPercentage = (completedLessons / totalLessons) * 100;
+
+                const subjectCard = document.createElement('div');
+                subjectCard.className = 'subject-card';
+                subjectCard.innerHTML = `
+                    <div class="subject-header">
+                        <div class="subject-icon ${subject.color}">
+                            <i class="${subject.icon}"></i>
+                        </div>
+                        <div class="subject-info">
+                            <h3>${subject.name}</h3>
+                            <p>${totalLessons} lessons • ${completedLessons} completed</p>
+                        </div>
+                    </div>
+                    <div class="subject-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progressPercentage}%"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span>Progress</span>
+                            <span>${Math.round(progressPercentage)}%</span>
+                        </div>
+                    </div>
+                    <div class="lessons-list" id="lessons_${subjectKey}">
+                        ${subject.lessons.map(lesson => `
+                            <div class="lesson-item ${lesson.completed ? 'completed' : lesson.id === getCurrentLessonId(subjectKey) ? 'current' : ''}">
+                                <div class="lesson-icon ${lesson.completed ? 'completed' : lesson.id === getCurrentLessonId(subjectKey) ? 'current' : 'locked'}">
+                                    <i class="fas ${lesson.completed ? 'fa-check' : lesson.id === getCurrentLessonId(subjectKey) ? 'fa-play' : 'fa-lock'}"></i>
+                                </div>
+                                <div class="lesson-info">
+                                    <div class="lesson-title">${lesson.title}</div>
+                                    <div class="lesson-desc">${lesson.description}</div>
+                                </div>
+                                <button class="lesson-action ${lesson.completed ? 'exam' : 'start'}" 
+                                        onclick="${lesson.completed ? `startExam('${subjectKey}', '${lesson.id}')` : `startLesson('${subjectKey}', '${lesson.id}')`}"
+                                        ${!lesson.completed && lesson.id !== getCurrentLessonId(subjectKey) ? 'disabled' : ''}>
+                                    ${lesson.completed ? 'Take Exam' : 'Start Lesson'}
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                subjectsGrid.appendChild(subjectCard);
+            });
+        }
+
+        function getCurrentLessonId(subjectKey) {
+            const subject = stemSubjects[subjectKey];
+            const firstIncompleteLesson = subject.lessons.find(lesson => !lesson.completed);
+            return firstIncompleteLesson ? firstIncompleteLesson.id : null;
+        }
+
+        function startLesson(subjectKey, lessonId) {
+            // Simulate lesson completion
+            const subject = stemSubjects[subjectKey];
+            const lesson = subject.lessons.find(l => l.id === lessonId);
+            
+            if (lesson) {
+                lesson.completed = true;
+                currentUser.completedLessons = (currentUser.completedLessons || 0) + 1;
+                currentUser.totalPoints = (currentUser.totalPoints || 0) + 10;
+                
+                // Update localStorage
+                localStorage.setItem('userData', JSON.stringify(currentUser));
+                
+                // Update UI
+                updateUserInterface();
+                loadSubjects();
+                
+                showNotification('Lesson completed! You earned 10 points!', 'success');
+            }
+        }
+
+        function startExam(subjectKey, lessonId) {
+            // Initialize exam system if not already done
+            if (window.examSystem) {
+                window.examSystem.init();
+                window.examSystem.startExam(subjectKey, lessonId);
+            } else {
+                alert('Exam system not loaded. Please refresh the page.');
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                color: white;
+                font-weight: 600;
+                z-index: 1001;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                max-width: 400px;
+            `;
+            
+            if (type === 'success') {
+                notification.style.background = 'var(--secondary-color)';
+            } else if (type === 'error') {
+                notification.style.background = 'var(--danger-color)';
+            } else {
+                notification.style.background = 'var(--primary-color)';
+            }
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+            window.location.href = '/frontend/index.html';
+        }
+    </script>
+</body>
+</html>
